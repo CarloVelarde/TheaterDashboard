@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 from app.models import MovieRead
+from app.db import get_connection
 
 router = APIRouter(
     prefix="/movies",
@@ -22,8 +23,53 @@ def list_movies():
     - Output: list of all movies (active, inactive, upcoming).
     - Implementation will SELECT from Movies table.
     """
-    # TODO: implement database logic
-    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+    try:
+        conn = get_connection()
+        # dictionary=True so we get dicts instead of tuples
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+            SELECT
+                MovieID   AS movie_id,
+                Title     AS title,
+                Genre     AS genre,
+                Runtime   AS runtime,
+                ReleaseDate AS release_date,
+                Price     AS price,
+                IsActive  AS is_active,
+                DistributorID AS distributor_id
+            FROM Movies
+            ORDER BY Title
+        """
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        # Clean up DB resources
+        cursor.close()
+        conn.close()
+
+        # Map rows to Pydantic models
+        movies: List[MovieRead] = []
+        for row in rows:
+            movies.append(
+                MovieRead(
+                    movie_id=row["movie_id"],
+                    title=row["title"],
+                    genre=row["genre"],
+                    runtime=row["runtime"],
+                    release_date=row["release_date"],
+                    price=float(row["price"]),
+                    # IsActive is stored as TINYINT(1) (either 0 or 1) so we convert to bool for clarity
+                    is_active=bool(row["is_active"]),
+                    distributor_id=row["distributor_id"],
+                )
+            )
+
+        return movies
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.get(

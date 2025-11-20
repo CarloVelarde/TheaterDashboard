@@ -12,6 +12,9 @@ class MovieRead(BaseModel):
     release_date: date = Field(..., example="2025-10-28")
     price: float = Field(..., example=250.00, description="Cost to theater per showing")
     is_active: bool = Field(..., example=True)
+    distributor_id: int = Field(
+        ..., example=1, description="FK to Distributors.DistributorID"
+    )
 
 
 class ShowtimeRead(BaseModel):
