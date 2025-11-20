@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
 from app.db import get_connection
-from app.routers import movies, tickets, reports
+from app.routers import movies, tickets, reports, customers, showtimes
 
 app = FastAPI(title="Movie Theater Dashboard")
 
@@ -28,6 +28,8 @@ def health_check():
 app.include_router(movies.router, prefix="/api")
 app.include_router(tickets.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
+app.include_router(showtimes.router, prefix="/api")
+app.include_router(customers.router, prefix="/api")
 
 # Serve static frontend (needs to be implemented)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
