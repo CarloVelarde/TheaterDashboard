@@ -137,7 +137,7 @@ class CustomerTicketHistoryEntry(BaseModel):
     """
     Represents a row in a customer's ticket history:
     combines ticket sale data with movie and showtime details.
-    Used in: /api/customers/{customer_id}/tickets
+    Used in: /api/tickets/customers/{customer_id}/tickets
     """
 
     ticket_sale_id: int = Field(..., example=1)
