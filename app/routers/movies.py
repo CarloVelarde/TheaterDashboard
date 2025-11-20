@@ -30,18 +30,18 @@ def list_movies():
         cursor = conn.cursor(dictionary=True)
 
         query = """
-            SELECT
-                MovieID   AS movie_id,
-                Title     AS title,
-                Genre     AS genre,
-                Runtime   AS runtime,
-                ReleaseDate AS release_date,
-                Price     AS price,
-                IsActive  AS is_active,
-                DistributorID AS distributor_id
-            FROM Movies
-            ORDER BY Title
-        """
+         SELECT
+               MovieID   AS movie_id,
+               Title     AS title,
+               Genre     AS genre,
+               Runtime   AS runtime,
+               ReleaseDate AS release_date,
+               Price     AS price,
+               IsActive  AS is_active,
+               DistributorID AS distributor_id
+         FROM Movies
+         ORDER BY Title
+      """
         cursor.execute(query)
         rows = cursor.fetchall()
 
@@ -94,13 +94,13 @@ def get_now_playing_movies():
 
         query = """
                SELECT
-                  MovieID   AS movie_id,
-                  Title     AS title,
-                  Genre     AS genre,
-                  Runtime   AS runtime,
+                  MovieID  AS movie_id,
+                  Title    AS title,
+                  Genre  AS genre,
+                  Runtime  AS runtime,
                   ReleaseDate AS release_date,
-                  Price     AS price,
-                  IsActive  AS is_active,
+                  Price   AS price,
+                  IsActive AS is_active,
                   DistributorID AS distributor_id
                FROM MOVIES
                WHERE IsActive = 1
@@ -148,5 +148,44 @@ def get_upcoming_movies():
     - Output: movies with ReleaseDate > current date.
     - Implementation will compare ReleaseDate with CURDATE()/NOW().
     """
-    # TODO: implement database logic
-    raise HTTPException(status_code=501, detail="Not implemented yet")
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+               SELECT
+                  MovieID   AS movie_id,
+                  Title    AS title,
+                  Genre     AS genre,
+                  Runtime    AS runtime,
+                  ReleaseDate  AS release_date,
+                  Price   AS price,
+                  IsActive   AS is_active,
+                  DistributorID AS distributor_id
+               FROM Movies
+               WHERE ReleaseDate > CURDATE()
+               ORDER BY ReleaseDate ASC
+      """
+
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return [
+            MovieRead(
+                movie_id=row["movie_id"],
+                title=row["title"],
+                genre=row["genre"],
+                runtime=row["runtime"],
+                release_date=row["release_date"],
+                price=float(row["price"]),
+                is_active=bool(row["is_active"]),
+                distributor_id=row["distributor_id"],
+            )
+            for row in rows
+        ]
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
