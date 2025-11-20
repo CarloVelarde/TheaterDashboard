@@ -23,7 +23,8 @@ Tech being used:
 ## Setup Instructions
 
 > **Assumption:** You already have MySQL running and the database created.  
-> There is a SQL setup script included in the project that creates all tables, triggers, procedures, views, and seed data. (add later -- REMINDER)
+> There is a SQL setup script included in the project (`scripts` dir) that contains scripts for setting up the DB.  
+> Run `define_db.sql` for the tables, triggers, functions, and procedures and run `seed_data.sql` to fill tables with demo records
 
 ### 1. Clone the project
 
