@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Theater Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">Theater Admin Console</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0" id="nav-sections">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="#"
+                data-section="overview-section"
+              >
+                Overview
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-section="tickets-section">
+                Ticket Operations
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-section="reports-section">
+                Reports & Analytics
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-4">
+      <div class="container">
+        <!-- Global alert area -->
+        <div id="global-alert-container"></div>
+
+        <!-- OVERVIEW SECTION -->
+        <section id="overview-section" class="app-section active">
+          <div class="row mb-4">
+            <div class="col-12">
+              <h2 class="section-title">Overview</h2>
+              <p class="text-muted">
+                A high level view of what is currently playing, what is coming
+                next, and the full movie catalog for the theater.
+              </p>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <!-- Now Playing -->
+            <div class="col-lg-4">
+              <div class="card shadow-sm h-100 border-primary-subtle">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <span class="fw-semibold"> Now Playing </span>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    id="btn-refresh-now-playing"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">Movies that are currently active:</p>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Genre</th>
+                          <th>Runtime</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-now-playing"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upcoming Movies -->
+            <div class="col-lg-4">
+              <div class="card shadow-sm h-100 border-success-subtle">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <span class="fw-semibold"> Upcoming Movies </span>
+                  <button
+                    class="btn btn-sm btn-outline-success"
+                    id="btn-refresh-upcoming"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Movies with a release date in the future:
+                  </p>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Genre</th>
+                          <th>Release</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-upcoming"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- All Movies -->
+            <div class="col-lg-4">
+              <div class="card shadow-sm h-100 border-info-subtle">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <span class="fw-semibold"> All Movies </span>
+                  <button
+                    class="btn btn-sm btn-outline-info"
+                    id="btn-refresh-all-movies"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Full movie catalog in the database (showing active,
+                    inactive, upcoming):
+                  </p>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Genre</th>
+                          <th>Active?</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-all-movies"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TICKET OPERATIONS SECTION -->
+        <section id="tickets-section" class="app-section">
+          <div class="row mb-4">
+            <div class="col-12">
+              <h2 class="section-title">Ticket Operations</h2>
+              <p class="text-muted">
+                Simulate ticket purchases to exercise the stored procedure and
+                triggers, and inspect ticket activity.
+              </p>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <!-- Purchase Ticket -->
+            <div class="col-lg-4">
+              <div class="card shadow-sm h-100 border-primary-subtle">
+                <div class="card-header fw-semibold">Purchase Ticket</div>
+                <div class="card-body">
+                  <p class="small text-muted">
+                    Uses the <code>Process_Ticket_Purchase</code> stored
+                    procedure and associated triggers to enforce capacity and
+                    timing rules.
+                  </p>
+                  <form id="form-purchase-ticket" class="small">
+                    <div class="mb-3">
+                      <label for="select-customer" class="form-label"
+                        >Customer</label
+                      >
+                      <select
+                        id="select-customer"
+                        class="form-select form-select-sm"
+                        required
+                      >
+                        <option value="">Select a customer...</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="select-showtime" class="form-label"
+                        >Showtime</label
+                      >
+                      <select
+                        id="select-showtime"
+                        class="form-select form-select-sm"
+                        required
+                      >
+                        <option value="">Select a showtime...</option>
+                      </select>
+                      <div class="form-text">
+                        Showtimes are labeled as
+                        <em>Movie Title @ StartTime (Theater)</em>.
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-primary w-100"
+                    >
+                      Purchase Ticket
+                    </button>
+                  </form>
+                  <div id="purchase-ticket-result" class="mt-3 small"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tickets Sold Today -->
+            <div class="col-lg-4">
+              <div class="card shadow-sm h-100 border-success-subtle">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <span class="fw-semibold">Tickets Sold Today</span>
+                  <button
+                    class="btn btn-sm btn-outline-success"
+                    id="btn-refresh-tickets-today"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    All TicketSales where the sale date is today.
+                  </p>
+                  <div class="table-responsive mb-2">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Customer</th>
+                          <th>Showtime</th>
+                          <th>Price</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-tickets-today"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Ticket History -->
+            <div class="col-lg-4">
+              <div class="card shadow-sm h-100 border-info-subtle">
+                <div class="card-header fw-semibold">
+                  Customer Ticket History
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    View all tickets purchased by a specific customer, including
+                    movie, showtime, and price.
+                  </p>
+                  <div class="mb-3">
+                    <label for="select-history-customer" class="form-label"
+                      >Customer</label
+                    >
+                    <select
+                      id="select-history-customer"
+                      class="form-select form-select-sm"
+                    >
+                      <option value="">Select a customer...</option>
+                    </select>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Movie</th>
+                          <th>Showtime</th>
+                          <th>Price</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-customer-history"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- All Ticket Sales -->
+          <div class="row g-4 mt-1">
+            <div class="col-12">
+              <div class="card shadow-sm border-secondary-subtle">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <span class="fw-semibold">All Ticket Sales</span>
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                    id="btn-refresh-all-tickets"
+                  >
+                    Load All
+                  </button>
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted mb-2">
+                    Full TicketSales table. Useful to show raw data for grading
+                    and debugging.
+                  </p>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>CustomerID</th>
+                          <th>ShowtimeID</th>
+                          <th>Price</th>
+                          <th>Sold At</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-all-tickets"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- REPORTS & ANALYTICS SECTION -->
+        <section id="reports-section" class="app-section">
+          <div class="row mb-4">
+            <div class="col-12">
+              <h2 class="section-title">Reports &amp; Analytics</h2>
+              <p class="text-muted">
+                Assignment-style queries: joins, aggregations, subqueries,
+                views, and SQL functions. Each card calls a specific report
+                endpoint in the API.
+              </p>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <!-- Query 1: Movie showtimes by date -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-primary-subtle">
+                <div class="card-header fw-semibold">
+                  Query 1 &mdash; Showtimes for a Movie on a Given Date
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Given a movie title and date, show all showtimes (theater +
+                    times). Demonstrates a join between Movies and Showtimes.
+                  </p>
+                  <form
+                    id="form-report-movie-showtimes"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-6">
+                      <label class="form-label" for="report-q1-title"
+                        >Movie Title</label
+                      >
+                      <input
+                        type="text"
+                        id="report-q1-title"
+                        class="form-control form-control-sm"
+                        placeholder="e.g. Galactic Odyssey"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label" for="report-q1-date"
+                        >Date</label
+                      >
+                      <input
+                        type="date"
+                        id="report-q1-date"
+                        class="form-control form-control-sm"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-primary">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="table-responsive mt-3">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>ShowtimeID</th>
+                          <th>Theater</th>
+                          <th>Start</th>
+                          <th>End</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-report-q1"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Query 2: Showtime availability -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-success-subtle">
+                <div class="card-header fw-semibold">
+                  Query 2 &mdash; Remaining Seats for a Showtime
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Given a showtime ID, show auditorium capacity, tickets sold,
+                    and seats remaining. Demonstrates joins and aggregation.
+                  </p>
+                  <form
+                    id="form-report-showtime-availability"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-6">
+                      <label class="form-label" for="report-q2-showtime-id"
+                        >Showtime</label
+                      >
+                      <select
+                        id="report-q2-showtime-id"
+                        class="form-select form-select-sm"
+                        required
+                      >
+                        <option value="">Select a showtime...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-success">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="mt-3" id="report-q2-result">
+                    <!-- Filled via JS with a small summary -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Q3 + Q4 -->
+          <div class="row g-4 mt-1">
+            <!-- Query 3: Concession revenue by category -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-warning-subtle">
+                <div class="card-header fw-semibold">
+                  Query 3 &mdash; Concession Revenue by Category
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Shows total revenue per concession category (popcorn,
+                    beverage, etc.), sorted by revenue. Demonstrates aggregation
+                    across sales.
+                  </p>
+                  <form
+                    id="form-report-concession-revenue"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-6">
+                      <label class="form-label" for="report-q3-limit"
+                        >Limit (optional)</label
+                      >
+                      <input
+                        type="number"
+                        id="report-q3-limit"
+                        class="form-control form-control-sm"
+                        min="1"
+                        placeholder="Top N categories"
+                      />
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-warning">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="table-responsive mt-3">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Category</th>
+                          <th>Total Revenue</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-report-q3"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Query 4: Lifetime ticket sales for a movie -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-info-subtle">
+                <div class="card-header fw-semibold">
+                  Query 4 &mdash; Lifetime Ticket Sales for a Movie
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Given a movie, show the total number of tickets ever sold
+                    for that movie. Demonstrates a subquery plus joins.
+                  </p>
+                  <form
+                    id="form-report-movie-lifetime"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-8">
+                      <label class="form-label" for="report-q4-movie-id"
+                        >Movie</label
+                      >
+                      <select
+                        id="report-q4-movie-id"
+                        class="form-select form-select-sm"
+                        required
+                      >
+                        <option value="">Select a movie...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-info">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="mt-3" id="report-q4-result"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Q5 + optional analytics -->
+          <div class="row g-4 mt-1">
+            <!-- Query 5: Upcoming showtimes (view) -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-secondary-subtle">
+                <div class="card-header fw-semibold">
+                  Query 5 &mdash; Upcoming Showtimes (View)
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Returns upcoming showtimes from the
+                    <code>UpcomingShowtimesView</code> with a dynamic status
+                    field (Scheduled, In Progress, Sold Out, etc.).
+                  </p>
+                  <form
+                    id="form-report-upcoming-showtimes"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-6">
+                      <label class="form-label" for="report-q5-days-ahead"
+                        >Days Ahead (optional)</label
+                      >
+                      <input
+                        type="number"
+                        id="report-q5-days-ahead"
+                        class="form-control form-control-sm"
+                        min="1"
+                        placeholder="e.g. 7"
+                      />
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-secondary">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="table-responsive mt-3">
+                    <table
+                      class="table table-sm table-striped align-middle mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Showtime</th>
+                          <th>Movie</th>
+                          <th>Theater</th>
+                          <th>Start</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-report-q5"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Functions: Daily ticket sales + Movie profit -->
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-dark-subtle mb-3">
+                <div class="card-header fw-semibold">
+                  Function &mdash; Daily Ticket Sales
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Calls the
+                    <code>get_number_of_ticket_sales(p_Date)</code> function to
+                    count ticket sales on a given day.
+                  </p>
+                  <form
+                    id="form-report-daily-sales"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-6">
+                      <label class="form-label" for="report-daily-date"
+                        >Date</label
+                      >
+                      <input
+                        type="date"
+                        id="report-daily-date"
+                        class="form-control form-control-sm"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-dark">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="mt-3" id="report-daily-result"></div>
+                </div>
+              </div>
+
+              <div class="card shadow-sm border-dark-subtle">
+                <div class="card-header fw-semibold">
+                  Functon &mdash; Movie Profit
+                </div>
+                <div class="card-body small">
+                  <p class="text-muted">
+                    Calls the <code>get_movie_profits(p_MovieID)</code> function
+                    to compute net profit for a movie (ticket revenue minus
+                    distributor fee).
+                  </p>
+                  <form
+                    id="form-report-movie-profit"
+                    class="row g-2 align-items-end"
+                  >
+                    <div class="col-md-8">
+                      <label class="form-label" for="report-profit-movie-id"
+                        >Movie</label
+                      >
+                      <select
+                        id="report-profit-movie-id"
+                        class="form-select form-select-sm"
+                        required
+                      >
+                        <option value="">Select a movie...</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                      <button type="submit" class="btn btn-sm btn-dark">
+                        Run
+                      </button>
+                    </div>
+                  </form>
+                  <div class="mt-3" id="report-profit-result"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- App JS -->
+    <script src="script.js"></script>
+  </body>
+</html>

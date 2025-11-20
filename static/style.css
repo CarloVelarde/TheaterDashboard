@@ -1,0 +1,87 @@
+/* Basic layout / global styles */
+
+body {
+  background: #f5f7fb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+/* Single-page sections */
+
+.app-section {
+  display: none;
+}
+
+.app-section.active {
+  display: block;
+}
+
+/* Cards */
+
+.card {
+  border-radius: 0.75rem;
+}
+
+.card-header {
+  background-color: #ffffff;
+}
+
+/* Tables */
+
+table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+table td {
+  font-size: 0.8rem;
+}
+
+/* Navbar tweaks */
+
+.navbar {
+  background: linear-gradient(90deg, #2ec7ff, #66a6ff);
+}
+
+.navbar-brand {
+  letter-spacing: 0.03em;
+}
+
+#nav-sections .nav-link {
+  border-radius: 999px;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+#nav-sections .nav-link.active {
+  background-color: #ffffff;
+  color: #1565c0 !important;
+}
+
+/* Alerts */
+
+#global-alert-container .alert {
+  margin-bottom: 0.75rem;
+}
+
+/* Small helper */
+
+.badge-pill {
+  border-radius: 999px;
+}
+
+/* Buttons */
+
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-info,
+.btn-outline-warning,
+.btn-outline-secondary {
+  border-width: 1.5px;
+}
